@@ -1,6 +1,8 @@
+import Misc.HTTPCode
+
 class Core:
     def __init__(self):
-        self.http_code = '200 OK'
+        self.http_code = Misc.HTTPCode['200']
         self.output = ""
         self.headers = []
         
