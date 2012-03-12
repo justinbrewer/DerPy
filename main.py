@@ -13,4 +13,4 @@ def application(environment, response_callback):
     c.Run(environment)
     
     response_callback(c.http_code, c.headers)
-    return [c.output]
+    return c.output

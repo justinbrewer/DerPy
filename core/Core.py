@@ -1,13 +1,13 @@
-import Misc.HTTPCode
+import Misc
 
 class Core:
     def __init__(self):
         self.http_code = Misc.HTTPCode['200']
-        self.output = ""
+        self.output = []
         self.headers = []
         
     def Run(self, env):
-        self.output = "This needs to be about 20% cooler."
+        self.output = ["This needs to be about 20% cooler."]
         self.headers = [('Content-type', 'text/html')]
         
         return
