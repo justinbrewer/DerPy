@@ -8,15 +8,15 @@ class Event:
     __metaclass__ = EventBuild
 
 def DispatchEvent(e):
-    handled = 0
+    handled = False
     for ext in BaseExtension.extensions:
         try:
             res = getattr(ext,e.callback)(e)
             if res == 1:
-                handled = 1
+                handled = True
                 continue
             elif res == 2:
-                return 2
+                return True
         except:
             continue
 
