@@ -3,7 +3,7 @@ class ExtMount(type):
         if not hasattr(cls,'extensions'):
             cls.extensions = []
         else:
-            cls.extensions.append(cls)
+            cls.extensions.append(cls())
     
 class BaseExtension:
     __metaclass__ = ExtMount
