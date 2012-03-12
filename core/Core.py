@@ -1,3 +1,5 @@
+from Event import DispatchEvent
+from Error import HTTPErrorEvent, HTTPException
 import Misc
 
 class Core:
@@ -7,7 +9,14 @@ class Core:
         self.headers = []
         
     def Run(self, env):
-        self.output = ["This needs to be about 20% cooler."]
-        self.headers = [('Content-type', 'text/html')]
-        
+        try:
+            self.output = ["This needs to be about 20% cooler."]
+            self.headers = [('Content-type', 'text/html')]
+            
+        except HTTPException as err:
+            if err.fatal or not DispatchEvent(HTTPErrorEvent(err.code)):
+                self.http_code = Misc.HTTPCode[str(err.code)]
+                self.headers = [('Content-type', 'text/html')]
+                self.output = ['<h1>'+self.http_code+'</h1>']
+
         return
