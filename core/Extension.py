@@ -8,5 +8,4 @@ class ExtMount(type):
 class BaseExtension:
     __metaclass__ = ExtMount
 
-def LoadExtensions():
-    from ext import TestExtension
+from ext import TestExtension
