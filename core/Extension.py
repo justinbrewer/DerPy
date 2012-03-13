@@ -1,4 +1,4 @@
-class ExtMount(type):
+class _ExtMount(type):
     def __init__(cls,name,bases,attrs):
         if not hasattr(cls,'extensions'):
             cls.extensions = []
@@ -6,6 +6,6 @@ class ExtMount(type):
             cls.extensions.append(cls())
     
 class BaseExtension:
-    __metaclass__ = ExtMount
+    __metaclass__ = _ExtMount
 
 from ext import TestExtension

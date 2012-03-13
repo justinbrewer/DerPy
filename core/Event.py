@@ -1,11 +1,11 @@
 from Extension import BaseExtension
 
-class EventBuild(type):
+class _EventBuild(type):
     def __init__(cls,name,bases,attrs):
         cls.callback = 'on' + name
 
 class Event:
-    __metaclass__ = EventBuild
+    __metaclass__ = _EventBuild
 
 def DispatchEvent(e):
     handled = False
