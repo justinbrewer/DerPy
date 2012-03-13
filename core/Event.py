@@ -11,13 +11,15 @@ def DispatchEvent(e):
     handled = False
     for ext in BaseExtension.extensions:
         try:
-            res = getattr(ext,e.callback)(e)
-            if res == 1:
-                handled = True
-                continue
-            elif res == 2:
-                return True
+            cb = getattr(ext,e.callback)
         except:
             continue
+
+        res = cb(e)
+        if res == 1:
+            handled = True
+            continue
+        elif res == 2:
+            return True
 
     return handled
