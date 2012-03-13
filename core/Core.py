@@ -4,7 +4,7 @@ import Misc
 
 class Core:
     def __init__(self):
-        self.http_code = Misc.HTTPCode['200']
+        self.http_code = Misc.HTTPCode[200]
         self.output = []
         self.headers = []
         
@@ -15,7 +15,7 @@ class Core:
             
         except HTTPException as err:
             if err.fatal or not DispatchEvent(HTTPErrorEvent(err.code)):
-                self.http_code = Misc.HTTPCode[str(err.code)]
+                self.http_code = Misc.HTTPCode[err.code]
                 self.headers = [('Content-type', 'text/html')]
                 self.output = ['<h1>'+self.http_code+'</h1>']
 
