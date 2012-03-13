@@ -20,3 +20,17 @@ class Core:
                 self.output = ['<h1>'+self.http_code+'</h1>']
 
         return
+
+class OutputSegment:
+    def __init__(self):
+        self.data = []
+
+    def __str__(self):
+        return '\n'.join(self.data)
+
+    def Add(self,i):
+        self.data.append(i)
+
+    def Key(self,k,v):
+        for i in self.data:
+            i = i % {k,v}
