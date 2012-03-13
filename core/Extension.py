@@ -8,4 +8,4 @@ class _ExtMount(type):
 class BaseExtension:
     __metaclass__ = _ExtMount
 
-from ext import TestExtension
+import ext
