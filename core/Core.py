@@ -1,10 +1,9 @@
 from Event import DispatchEvent
 from Error import HTTPErrorEvent, HTTPException
-import Misc
 
 class Core:
     def __init__(self):
-        self.http_code = Misc.HTTPCode[200]
+        self.http_code = _HTTPCode[200]
         self.output = []
         self.headers = []
         
@@ -15,7 +14,7 @@ class Core:
             
         except HTTPException as err:
             if err.fatal or not DispatchEvent(HTTPErrorEvent(err.code)):
-                self.http_code = Misc.HTTPCode[err.code]
+                self.http_code = _HTTPCode[err.code]
                 self.headers = [('Content-type', 'text/html')]
                 self.output = ['<h1>'+self.http_code+'</h1>']
 
@@ -34,3 +33,10 @@ class OutputSegment:
     def Key(self,k,v):
         for i in self.data:
             i = i % {k,v}
+
+_HTTPCode = {200: '200 OK',
+             302: '302 Found',
+             403: '403 Forbidden',
+             404: '404 Not Found',
+             500: '500 Internal Server Error',
+             503: '503 Service Unavailable'}
