@@ -1,0 +1,33 @@
+DerPy is a minimalist, low-to-no dependency website construction framework. It
+runs on Apache/mod_wsgi, and it may or may not support more platforms in the 
+future. Documentation is currently non-existant, though you can find a lot of 
+information in the commit messages; I'll write some up if anyone expresses 
+interest.
+
+I'm writing this as a basis for an assignment and a few personal projects. Its 
+basic structure is based on shish's Shimmie2 (more specifically SCore): 
+Extensions (Event Listeners) do everything; the only significant structures 
+other than Extensions are for initialization, coordination and database access. 
+The only major departure from the Shimmie model is concurrency, and that's only 
+because it's forced upon us by WSGI.
+
+(Why's it called DerPy? This is my first real experience with Python, so there 
+will likely be lots of derp.)
+
+**This is not in a usable state yet** : The database engine doesn't do 
+anything, and no events are generated.
+
+Legal muck follows:
+
+DerPy is free software: you can redistribute it and/or modify it under the 
+terms of the GNU Lesser General Public License as published by the Free 
+Software Foundation, either version of the License, or (at your option) any 
+later version.
+
+This software is distributed in the hope that it will be useful, but WITHOUT 
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more 
+details.
+
+You should have received a copy of the GNU Lesser General Public License along 
+with this software. If not, see <http://www.gnu.org/licenses/>.
