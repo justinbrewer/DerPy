@@ -1,3 +1,4 @@
+from Extension import LoadExtensions
 from Event import DispatchEvent
 from Error import HTTPErrorEvent, HTTPException
 
@@ -8,6 +9,8 @@ class Core:
         self.headers = []
         
     def Run(self, env):
+        LoadExtensions()
+        
         try:
             self.output = ["This needs to be about 20% cooler."]
             self.headers = [('Content-type', 'text/html')]

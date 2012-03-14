@@ -3,9 +3,14 @@ class _ExtMount(type):
         if not hasattr(cls,'extensions'):
             cls.extensions = []
         else:
-            cls.extensions.append(cls())
-    
+            cls.extensions.append(cls)
+
 class BaseExtension:
     __metaclass__ = _ExtMount
 
-import ext
+Registry = []
+
+def LoadExtensions():
+    import ext
+    for extclass in BaseExtension.extensions:
+        Registry.append(extclass())
