@@ -34,7 +34,10 @@ def LoadExtensions():
     _store.registry.sort(key=_Key)
 
 def GetExtensions():
-    return _store.registry
+    try:
+        return _store.registry
+    except AttributeError:
+        return _StaticRegistry
 
 #--------------------
 import ext
