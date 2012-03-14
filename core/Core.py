@@ -10,10 +10,9 @@ class Core:
         self.headers = []
         
     def Run(self, env):
-        LoadExtensions()
-        
         try:
             Database.Connect()
+            LoadExtensions()
             
             self.output = ["This needs to be about 20% cooler."]
             self.headers = [('Content-type', 'text/html')]
