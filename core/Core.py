@@ -17,6 +17,7 @@ class Core:
             self.output = ["This needs to be about 20% cooler."]
             self.headers = [('Content-type', 'text/html')]
             
+            Database.Disconnect()
         except HTTPException as err:
             if err.fatal or not DispatchEvent(HTTPErrorEvent(err.code)):
                 self.http_code = _HTTPCode[err.code]

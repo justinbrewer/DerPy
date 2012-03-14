@@ -11,6 +11,9 @@ class MySQLEngine(_DatabaseEngine):
     def __init__(self,host,user,passwd,db):
         self.conn = MySQLdb.connect(host=host,user=user,passwd=passwd,db=db)
         self.cursor = self.conn.cursor()
+    
+    def Close(self):
+        self.conn.close()
 
 #--------------------
 import re
@@ -32,6 +35,9 @@ def Connect():
         _store.dbe = MySQLEngine(_conn_info[3],_conn_info[1],_conn_info[2],_conn_info[4])
     else:
         raise HTTPException(500)
+
+def Disconnect():
+    _store.dbe.Close()
 
 def DB():
     return _store.dbe
