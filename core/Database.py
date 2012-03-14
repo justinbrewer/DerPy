@@ -1,13 +1,16 @@
 import MySQLdb
 import re
 
-from Config import DSN
 from Error import HTTPException
 
 DB = None
 
 def Connect():
-    conn_info = re.match(r"^(\w+)\:(?:user=(\w+)(?:;|$)|password=(\w+)(?:;|$)|host=([\w\.\-]+)(?:;|$)|dbname=([\w_]+)(?:;|$))+",DSN)
+    cfg_file = open('CONFIG','r')
+    dsn = cfg_file.readline().strip()
+    cfg_file.close()
+    
+    conn_info = re.match(r"^(\w+)\:(?:user=(\w+)(?:;|$)|password=(\w+)(?:;|$)|host=([\w\.\-]+)(?:;|$)|dbname=([\w_]+)(?:;|$))+",dsn)
     proto,user,password,host,dbname = conn_info.groups()
     
     if proto == 'mysql':
