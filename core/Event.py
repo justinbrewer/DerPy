@@ -1,4 +1,4 @@
-from Extension import Registry
+from Extension import GetExtensions
 
 class _EventBuild(type):
     def __init__(cls,name,bases,attrs):
@@ -8,8 +8,9 @@ class Event:
     __metaclass__ = _EventBuild
 
 def DispatchEvent(e):
+    extensions = GetExtensions()
     handled = False
-    for ext in Registry:
+    for ext in extensions:
         try:
             cb = getattr(ext,e.callback)
         except:
