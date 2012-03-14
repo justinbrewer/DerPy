@@ -23,6 +23,14 @@ def _Key(e):
         return maxint
 
 #--------------------
+import ext
+_StaticRegistry = []
+
+for extclass in StaticExtension.extensions:
+    _StaticRegistry.append(extclass())
+_StaticRegistry.sort(key=_Key)
+
+#--------------------
 import threading
 _store = threading.local()
 
@@ -38,11 +46,3 @@ def GetExtensions():
         return _store.registry
     except AttributeError:
         return _StaticRegistry
-
-#--------------------
-import ext
-_StaticRegistry = []
-
-for extclass in StaticExtension.extensions:
-    _StaticRegistry.append(extclass())
-_StaticRegistry.sort(key=_Key)
