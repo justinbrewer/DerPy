@@ -2,6 +2,7 @@ try:
     from mod_wsgi import version
     import sys
     import os
+    os.chdir(os.path.dirname(__file__))
     sys.path.append(os.path.dirname(__file__))
 except:
     raise
