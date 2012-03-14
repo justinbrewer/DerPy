@@ -6,6 +6,9 @@ class DerpExtension(BaseExtension):
     def __init__(self):
         print 'Derp'
     
+    def __del__(self):
+        print 'What did I do?!'
+    
     def onDerpEvent(self,e):
         print "Derp"
         return 1
@@ -13,3 +16,6 @@ class DerpExtension(BaseExtension):
 class HerpExtension(StaticExtension):
     def __init__(self):
         print 'Herp'
+    
+    def __def__(self):
+        print 'This shouldnt happen.'

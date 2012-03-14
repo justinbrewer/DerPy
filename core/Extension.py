@@ -41,6 +41,11 @@ def LoadExtensions():
     _store.registry.extend(_StaticRegistry)
     _store.registry.sort(key=_Key)
 
+def UnloadExtensions():
+    for statext in _StaticRegistry:
+        _store.registry.remove(statext)
+    del _store.registry
+
 def GetExtensions():
     try:
         return _store.registry
