@@ -1,3 +1,4 @@
+import Database
 from Extension import LoadExtensions
 from Event import DispatchEvent
 from Error import HTTPErrorEvent, HTTPException
@@ -12,6 +13,8 @@ class Core:
         LoadExtensions()
         
         try:
+            Database.Connect()
+            
             self.output = ["This needs to be about 20% cooler."]
             self.headers = [('Content-type', 'text/html')]
             
