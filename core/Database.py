@@ -17,7 +17,7 @@ class MySQLEngine(_DatabaseEngine):
 
 #--------------------
 import re
-__cfg_file = open('CONFIG','r')
+__cfg_file = open('db.cfg','r')
 __dsn = __cfg_file.readline().strip()
 __cfg_file.close()
 __conn_info = re.match(r"^(\w+)\:(?:user=(\w+)(?:;|$)|password=(\w+)(?:;|$)|host=([\w\.\-]+)(?:;|$)|dbname=([\w_]+)(?:;|$))+",__dsn)
