@@ -7,6 +7,10 @@ class _DatabaseEngine:
         self.conn = None
         self.cursor = None
 
+class NullEngine(_DatabaseEngine):
+    def Close(self):
+        pass
+
 class MySQLEngine(_DatabaseEngine):
     def __init__(self,host,user,passwd,db):
         self.conn = MySQLdb.connect(host=host,user=user,passwd=passwd,db=db)
@@ -33,6 +37,8 @@ _store = threading.local()
 def Connect():
     if _conn_info[0] == 'mysql':
         _store.dbe = MySQLEngine(_conn_info[3],_conn_info[1],_conn_info[2],_conn_info[4])
+    elif _conn_info[0] == 'null':
+        _store.dbe = NullEngine()
     else:
         raise HTTPException(500)
 
