@@ -17,5 +17,5 @@ class HerpExtension(StaticExtension):
     def __init__(self):
         print 'Herp'
     
-    def __def__(self):
+    def __del__(self):
         print 'This shouldnt happen.'
