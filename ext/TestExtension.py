@@ -12,6 +12,9 @@ class DerpExtension(BaseExtension):
     def onDerpEvent(self,e):
         print "Derp"
         return 1
+    
+    def onBodyBuildEvent(self,e):
+        e.Add('This needs to be about 20% cooler')
 
 class HerpExtension(StaticExtension):
     def __init__(self):

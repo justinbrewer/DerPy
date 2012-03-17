@@ -1,6 +1,6 @@
 import Database
 from Extension import LoadExtensions, UnloadExtensions
-from Event import DispatchEvent
+from Event import DispatchEvent, Event
 from Error import HTTPErrorEvent, HTTPException
 
 class Core:
@@ -14,11 +14,31 @@ class Core:
             Database.Connect()
             LoadExtensions()
             
-            self.output = ["This needs to be about 20% cooler."]
-            self.headers = [('Content-type', 'text/html')]
+            DispatchEvent(PageRequestEvent(None,None,None))
+            
+            response = ResponseBuildEvent()
+            DispatchEvent(response)
+
+            head = HeadBuildEvent()
+            DispatchEvent(head)
+            
+            body = BodyBuildEvent()
+            DispatchEvent(body)
             
             UnloadExtensions()
             Database.Disconnect()
+            
+            output = OutputSegment()
+            output.Add('<html><head>')
+            output.Add(head)
+            output.Add('</head><body>')
+            output.Add(body)
+            output.Add('</body></html>')
+            
+            self.http_code = response.GetCode()
+            self.headers = response.GetHeaders()
+            self.output = [str(output)]
+            
         except HTTPException as err:
             if err.fatal or not DispatchEvent(HTTPErrorEvent(err.code)):
                 self.http_code = _HTTPCode[err.code]
@@ -40,6 +60,37 @@ class OutputSegment:
     def Key(self,k,v):
         for i in self.data:
             i = i % {k,v}
+
+class PageRequestEvent(Event):
+    def __init__(self,path,get,post):
+        self.path = path
+        self.get = get
+        self.post = post
+
+class ResponseBuildEvent(Event):
+    def __init__(self):
+        self.code = 200
+        self.headers = {}
+    
+    def SetCode(self,i):
+        self.code = i
+    
+    def GetCode(self):
+        return self.code
+    
+    def SetHeader(self,k,v):
+        self.headers[k] = v
+    
+    def GetHeaders(self):
+        return self.headers.items()
+
+class HeadBuildEvent(OutputSegment,Event):
+    def __init__(self):
+        super(HeadBuildEvent,self).__init__()
+
+class BodyBuildEvent(OutputSegment,Event):
+    def __init__(self):
+        super(BodyBuildEvent,self).__init__()
 
 _HTTPCode = {200: '200 OK',
              302: '302 Found',
