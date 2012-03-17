@@ -52,7 +52,7 @@ class OutputSegment:
         self.data = []
 
     def __str__(self):
-        return '\n'.join(self.data)
+        return '\n'.join(map(str,self.data))
 
     def Add(self,i):
         self.data.append(i)
