@@ -35,7 +35,7 @@ class Core:
             output.Add(body)
             output.Add('</body></html>')
             
-            self.http_code = response.GetCode()
+            self.http_code = _HTTPCode[response.GetCode()]
             self.headers = response.GetHeaders()
             self.output = [str(output)]
             
@@ -70,7 +70,7 @@ class PageRequestEvent(Event):
 class ResponseBuildEvent(Event):
     def __init__(self):
         self.code = 200
-        self.headers = {}
+        self.headers = {'Content-type':'text/html'}
     
     def SetCode(self,i):
         self.code = i
