@@ -26,12 +26,6 @@ class ResponseBuildEvent(Event):
         self.code = 200
         self.headers = {'Content-type':'text/html'}
     
-    def SetCode(self,i):
-        self.code = i
-    
-    def GetCode(self):
-        return self.code
-    
     def SetHeader(self,k,v):
         self.headers[k] = v
     
@@ -74,7 +68,7 @@ def Run(env):
         output = OutputSegment()
         output.Add(['<html><head>',head,'</head><body>',body,'</body></html>'])
         
-        return [_HTTPCode[response.GetCode()],response.GetHeaders(),[str(output)]]
+        return [_HTTPCode[response.code],response.GetHeaders(),[str(output)]]
     
     except HTTPException as err:
         if err.fatal or not DispatchEvent(HTTPErrorEvent(err.code)):
