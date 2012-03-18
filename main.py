@@ -7,11 +7,10 @@ try:
 except:
     raise
     
-from core.Core import Core
+from core.Core import Run
 
 def application(environment, response_callback):
-    c = Core()
-    c.Run(environment)
+    res = Run(environment)
     
-    response_callback(c.http_code, c.headers)
-    return c.output
+    response_callback(res[0], res[1])
+    return res[2]

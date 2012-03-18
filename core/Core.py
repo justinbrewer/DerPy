@@ -3,47 +3,35 @@ from Extension import LoadExtensions, UnloadExtensions
 from Event import DispatchEvent, Event
 from Error import HTTPErrorEvent, HTTPException
 
-class Core:
-    def __init__(self):
-        self.http_code = _HTTPCode[200]
-        self.output = []
-        self.headers = []
+def Run(env):
+    try:
+        _store.env = env
         
-    def Run(self, env):
-        try:
-            _store.env = env
-            
-            Database.Connect()
-            LoadExtensions()
-            
-            DispatchEvent(PageRequestEvent(env['PATH_INFO']))
-            
-            response = ResponseBuildEvent()
-            DispatchEvent(response)
-
-            head = HeadBuildEvent()
-            DispatchEvent(head)
-            
-            body = BodyBuildEvent()
-            DispatchEvent(body)
-            
-            UnloadExtensions()
-            Database.Disconnect()
-            
-            output = OutputSegment()
-            output.Add(['<html><head>',head,'</head><body>',body,'</body></html>'])
-            
-            self.http_code = _HTTPCode[response.GetCode()]
-            self.headers = response.GetHeaders()
-            self.output = [str(output)]
-            
-        except HTTPException as err:
-            if err.fatal or not DispatchEvent(HTTPErrorEvent(err.code)):
-                self.http_code = _HTTPCode[err.code]
-                self.headers = [('Content-type', 'text/html')]
-                self.output = ['<h1>'+self.http_code+'</h1>']
-
-        return
+        Database.Connect()
+        LoadExtensions()
+        
+        DispatchEvent(PageRequestEvent(env['PATH_INFO']))
+        
+        response = ResponseBuildEvent()
+        DispatchEvent(response)
+        
+        head = HeadBuildEvent()
+        DispatchEvent(head)
+        
+        body = BodyBuildEvent()
+        DispatchEvent(body)
+        
+        UnloadExtensions()
+        Database.Disconnect()
+        
+        output = OutputSegment()
+        output.Add(['<html><head>',head,'</head><body>',body,'</body></html>'])
+        
+        return [_HTTPCode[response.GetCode()],response.GetHeaders(),[str(output)]]
+    
+    except HTTPException as err:
+        if err.fatal or not DispatchEvent(HTTPErrorEvent(err.code)):
+            return [_HTTPCode[err.code],[('Content-type', 'text/html')],['<h1>'+self.http_code+'</h1>']]
 
 class OutputSegment:
     def __init__(self):
