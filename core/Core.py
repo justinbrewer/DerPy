@@ -31,11 +31,7 @@ class Core:
             Database.Disconnect()
             
             output = OutputSegment()
-            output.Add('<html><head>')
-            output.Add(head)
-            output.Add('</head><body>')
-            output.Add(body)
-            output.Add('</body></html>')
+            output.Add(['<html><head>',head,'</head><body>',body,'</body></html>'])
             
             self.http_code = _HTTPCode[response.GetCode()]
             self.headers = response.GetHeaders()
@@ -54,7 +50,7 @@ class OutputSegment:
         self.data = []
 
     def __str__(self):
-        return '\n'.join(map(str,self.data))
+        return _Collapse(self.data)
 
     def Add(self,i):
         self.data.append(i)
@@ -98,6 +94,15 @@ _HTTPCode = {200: '200 OK',
              404: '404 Not Found',
              500: '500 Internal Server Error',
              503: '503 Service Unavailable'}
+
+def _Collapse(data):
+    flat = []
+    for i in data:
+        if isinstance(i,list):
+            flat.append(_Collapse(i))
+        else:
+            flat.append(str(i))
+    return '\n'.join(flat)
 
 #--------------------
 import threading
