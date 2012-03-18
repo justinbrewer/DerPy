@@ -3,36 +3,6 @@ from Extension import LoadExtensions, UnloadExtensions
 from Event import DispatchEvent, Event
 from Error import HTTPErrorEvent, HTTPException
 
-def Run(env):
-    try:
-        _store.env = env
-        
-        Database.Connect()
-        LoadExtensions()
-        
-        DispatchEvent(PageRequestEvent(env['PATH_INFO']))
-        
-        response = ResponseBuildEvent()
-        DispatchEvent(response)
-        
-        head = HeadBuildEvent()
-        DispatchEvent(head)
-        
-        body = BodyBuildEvent()
-        DispatchEvent(body)
-        
-        UnloadExtensions()
-        Database.Disconnect()
-        
-        output = OutputSegment()
-        output.Add(['<html><head>',head,'</head><body>',body,'</body></html>'])
-        
-        return [_HTTPCode[response.GetCode()],response.GetHeaders(),[str(output)]]
-    
-    except HTTPException as err:
-        if err.fatal or not DispatchEvent(HTTPErrorEvent(err.code)):
-            return [_HTTPCode[err.code],[('Content-type', 'text/html')],['<h1>'+self.http_code+'</h1>']]
-
 class OutputSegment:
     def __init__(self):
         self.data = []
@@ -76,6 +46,44 @@ class BodyBuildEvent(OutputSegment,Event):
     def __init__(self):
         super(BodyBuildEvent,self).__init__()
 
+#--------------------
+import threading
+_store = threading.local()
+
+def Run(env):
+    try:
+        _store.env = env
+        
+        Database.Connect()
+        LoadExtensions()
+        
+        DispatchEvent(PageRequestEvent(env['PATH_INFO']))
+        
+        response = ResponseBuildEvent()
+        DispatchEvent(response)
+        
+        head = HeadBuildEvent()
+        DispatchEvent(head)
+        
+        body = BodyBuildEvent()
+        DispatchEvent(body)
+        
+        UnloadExtensions()
+        Database.Disconnect()
+        
+        output = OutputSegment()
+        output.Add(['<html><head>',head,'</head><body>',body,'</body></html>'])
+        
+        return [_HTTPCode[response.GetCode()],response.GetHeaders(),[str(output)]]
+    
+    except HTTPException as err:
+        if err.fatal or not DispatchEvent(HTTPErrorEvent(err.code)):
+            return [_HTTPCode[err.code],[('Content-type', 'text/html')],['<h1>'+self.http_code+'</h1>']]
+
+def Env():
+    return _store.env
+
+#--------------------
 _HTTPCode = {200: '200 OK',
              302: '302 Found',
              403: '403 Forbidden',
@@ -91,10 +99,3 @@ def _Collapse(data):
         else:
             flat.append(str(i))
     return '\n'.join(flat)
-
-#--------------------
-import threading
-_store = threading.local()
-
-def Env():
-    return _store.env
