@@ -3,8 +3,8 @@ import MySQLdb
 from core.Database import DatabaseEngine
 
 class EngineImpl(DatabaseEngine):
-    def __init__(self,host,user,passwd,db):
-        self.conn = MySQLdb.connect(host=host,user=user,passwd=passwd,db=db)
+    def __init__(self,**kwargs):
+        self.conn = MySQLdb.connect(**kwargs)
         self.cursor = self.conn.cursor()
     
     def Close(self):

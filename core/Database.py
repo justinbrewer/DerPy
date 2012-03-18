@@ -6,6 +6,8 @@ class DatabaseEngine:
         self.cursor = None
 
 class NullEngine(DatabaseEngine):
+    def __init__(self,**kwargs):
+        pass
     def Close(self):
         pass
 
@@ -27,11 +29,12 @@ _store = threading.local()
 def Connect():
     if _conn_info[0] == 'mysql':
         from drivers.MySQL import EngineImpl
-        _store.dbe = EngineImpl(_conn_info[3],_conn_info[1],_conn_info[2],_conn_info[4])
     elif _conn_info[0] == 'null':
-        _store.dbe = NullEngine()
+        class EngineImpl(NullEngine): pass
     else:
         raise HTTPException(500)
+    
+    _store.dbe = EngineImpl(host=_conn_info[3],user=_conn_info[1],passwd=_conn_info[2],db=_conn_info[4])
 
 def Disconnect():
     _store.dbe.Close()
