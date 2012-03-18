@@ -16,9 +16,9 @@ import re
 __cfg_file = open('db.cfg','r')
 __dsn = __cfg_file.readline().strip()
 __cfg_file.close()
-__conn_info = re.match(r"^(\w+)\:(?:user=(\w+)(?:;|$)|password=(\w+)(?:;|$)|host=([\w\.\-]+)(?:;|$)|dbname=([\w_]+)(?:;|$))+",__dsn)
+__conn_info = re.match(r"^(?P<proto>\w+)\:(?:user=(?P<user>\w+)(?:;|$)|password=(?P<passwd>\w+)(?:;|$)|host=(?P<host>[\w\.\-]+)(?:;|$)|dbname=(?P<db>[\w_]+)(?:;|$))+",__dsn)
 
-_conn_info = list(__conn_info.groups())
+_conn_info = __conn_info.groupdict()
 
 del [__conn_info,__dsn,__cfg_file]
 
@@ -27,14 +27,14 @@ import threading
 _store = threading.local()
 
 def Connect():
-    if _conn_info[0] == 'mysql':
+    if _conn_info['proto'] == 'mysql':
         from drivers.MySQL import EngineImpl
-    elif _conn_info[0] == 'null':
+    elif _conn_info['proto'] == 'null':
         class EngineImpl(NullEngine): pass
     else:
         raise HTTPException(500)
     
-    _store.dbe = EngineImpl(host=_conn_info[3],user=_conn_info[1],passwd=_conn_info[2],db=_conn_info[4])
+    _store.dbe = EngineImpl(**_conn_info.copy())
 
 def Disconnect():
     _store.dbe.Close()
