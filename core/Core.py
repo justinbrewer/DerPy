@@ -11,10 +11,12 @@ class Core:
         
     def Run(self, env):
         try:
+            _store.env = env
+            
             Database.Connect()
             LoadExtensions()
             
-            DispatchEvent(PageRequestEvent(None,None,None))
+            DispatchEvent(PageRequestEvent(env['PATH_INFO']))
             
             response = ResponseBuildEvent()
             DispatchEvent(response)
@@ -62,10 +64,8 @@ class OutputSegment:
             i = i % {k,v}
 
 class PageRequestEvent(Event):
-    def __init__(self,path,get,post):
+    def __init__(self,path):
         self.path = path
-        self.get = get
-        self.post = post
 
 class ResponseBuildEvent(Event):
     def __init__(self):
@@ -98,3 +98,10 @@ _HTTPCode = {200: '200 OK',
              404: '404 Not Found',
              500: '500 Internal Server Error',
              503: '503 Service Unavailable'}
+
+#--------------------
+import threading
+_store = threading.local()
+
+def Env():
+    return _store.env
