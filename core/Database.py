@@ -4,6 +4,17 @@ class DatabaseEngine:
     def __init__(self):
         self.conn = None
         self.cursor = None
+    
+    def Execute(self,q,v=[]):
+        self.cursor.execute(q,v)
+    
+    def FetchOne(self,q,v=[]):
+        self.cursor.execute(q,v)
+        return self.cursor.fetchone()
+    
+    def FetchAll(self,q,v=[]):
+        self.cursor.execute(q,v)
+        return self.cursor.fetchall()
 
 class NullEngine(DatabaseEngine):
     def __init__(self,**kwargs):
